@@ -218,7 +218,7 @@ export default function Actividad() {
     clienteAxios
       .patch(
         `/api/actividades/${activityId}/modulo`,
-        { modulo: Number(nextModulo), role: 'psicologo' },
+        { modulo: Number(nextModulo), role: 'psicologo', paciente_id: Number(pacienteId) },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -542,6 +542,7 @@ export default function Actividad() {
                     <th className="px-4 py-3 font-semibold">Tipo</th>
                     <th className="px-4 py-3 font-semibold">Duración</th>
                     <th className="px-4 py-3 font-semibold">Módulo actual</th>
+                    <th className="px-4 py-3 font-semibold">Completada</th>
                     <th className="px-4 py-3 font-semibold">Acción</th>
                   </tr>
                 </thead>
@@ -550,6 +551,7 @@ export default function Actividad() {
                     filteredActivities.map((actividad) => {
                       const isMoving = movingActivityId === actividad.id;
                       const isMoved = moveSuccessId === actividad.id;
+                      const isCompleted = actividad.completada === true;
                       const showAudioPlayer = isMeditationType(actividad.tipo) && !!actividad.audio_url;
                       const moveTargets = availableModules.filter((modulo) => modulo !== Number(actividad.modulo));
 
@@ -566,10 +568,18 @@ export default function Actividad() {
                             <td className="px-4 py-3 text-[#2C3E50] dark:text-white capitalize">{actividad.tipo || '-'}</td>
                             <td className="px-4 py-3 text-[#2C3E50] dark:text-white">{actividad.tiempo_estimado_min} min</td>
                             <td className="px-4 py-3 text-[#2C3E50] dark:text-white">Módulo {actividad.modulo}</td>
+                            <td className="px-4 py-3">
+                              <span
+                                className={`inline-flex items-center justify-center text-base font-bold ${isCompleted ? 'text-emerald-500' : 'text-red-500'}`}
+                                title={isCompleted ? 'Completada' : 'No completada'}
+                              >
+                                {isCompleted ? '✓' : '✗'}
+                              </span>
+                            </td>
                             <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
                               <div className="flex items-center gap-2">
                                 <select
-                                  disabled={isMoving}
+                                  disabled={isMoving || isCompleted}
                                   defaultValue=""
                                   onChange={(e) => {
                                     const selectedModulo = Number(e.target.value);
@@ -581,14 +591,14 @@ export default function Actividad() {
                                   className="rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-[#1f2c3a] px-3 py-2 text-[#2C3E50] dark:text-white outline-none hover:border-[#85C1E9]"
                                 >
                                   <option value="" disabled>
-                                    Mover módulo...
+                                    {isCompleted ? 'Completada' : 'Mover módulo...'}
                                   </option>
                                   {moveTargets.map((targetModulo) => (
                                     <option key={`${actividad.id}-${targetModulo}`} value={targetModulo}>
                                       Mover a módulo {targetModulo}
                                     </option>
                                   ))}
-                                  {moveTargets.length === 0 && (
+                                  {moveTargets.length === 0 && !isCompleted && (
                                     <option value="" disabled>
                                       Sin módulos alternativos
                                     </option>
@@ -606,7 +616,7 @@ export default function Actividad() {
                     })
                   ) : (
                     <tr>
-                      <td className="px-4 py-6 text-center text-[#5D6D7E] dark:text-[#BDC3C7]" colSpan={5}>
+                      <td className="px-4 py-6 text-center text-[#5D6D7E] dark:text-[#BDC3C7]" colSpan={6}>
                         No hay actividades para los filtros seleccionados.
                       </td>
                     </tr>

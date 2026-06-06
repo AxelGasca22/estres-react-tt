@@ -496,21 +496,6 @@ export default function Paciente() {
                       {resp.respuesta}
                     </div>
 
-                    {/* Metadatos opcionales */}
-                    {(resp.nivel_estres || resp.estado_animo) && (
-                      <div className="flex gap-3 mt-3 flex-wrap">
-                        {resp.nivel_estres && (
-                          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400">
-                            Estrés: {resp.nivel_estres}
-                          </span>
-                        )}
-                        {resp.estado_animo && (
-                          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400">
-                            Ánimo: {resp.estado_animo}
-                          </span>
-                        )}
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>

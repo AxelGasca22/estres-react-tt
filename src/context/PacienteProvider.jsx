@@ -126,12 +126,33 @@ const PacienteProvider = ({ children }) => {
             doc.setFont('helvetica', 'normal');
 
             modulos.forEach((modulo, index) => {
+                // Salto de página si la fila no cabe (20mm de margen para el footer)
+                if (currentY + 10 > pageHeight - 20) {
+                    doc.addPage();
+                    currentY = 20;
+
+                    // Repetir cabecera de tabla en la nueva página
+                    doc.setFillColor(133, 193, 233);
+                    doc.rect(margin, currentY, pageWidth - (margin * 2), 10, 'F');
+                    doc.setTextColor(255, 255, 255);
+                    doc.setFontSize(10);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('Módulo Asignado', margin + 5, currentY + 6.5);
+                    doc.text('Estado', margin + 90, currentY + 6.5);
+                    doc.text('Progreso', margin + 140, currentY + 6.5);
+                    currentY += 10;
+
+                    doc.setTextColor(60, 60, 60);
+                    doc.setFont('helvetica', 'normal');
+                }
+
                 // Filas con color alterno
                 if (index % 2 === 0) {
                     doc.setFillColor(249, 251, 253);
                     doc.rect(margin, currentY, pageWidth - (margin * 2), 10, 'F');
                 }
 
+                doc.setFontSize(9);
                 doc.text(modulo.nombre, margin + 5, currentY + 6.5);
                 doc.text(modulo.estado.charAt(0).toUpperCase() + modulo.estado.slice(1), margin + 90, currentY + 6.5);
                 doc.text(`${modulo.progreso}%`, margin + 140, currentY + 6.5);

@@ -239,7 +239,7 @@ export default function Paciente() {
       <div ref={printRef}>
         {/* --- STATS GRID --- */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          <div className="col-span-1 lg:col-span-3 grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="col-span-1 lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6">
 
             {/* Stat 1: Estado de Ánimo */}
             <div className="bg-white dark:bg-[#2C3E50] p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-between">
